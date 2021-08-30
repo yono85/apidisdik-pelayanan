@@ -43,8 +43,9 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','auth']],function($
 
 
 //testing
-$router->post('/testing/upload', 'testing\upload\index@image');
+// $router->post('/testing/upload', 'testing\upload\index@image');
 
+$router->get('/', 'front\index@main');
 
 //any get url
 $router->get('/{any}', 'error\page\index@get');
