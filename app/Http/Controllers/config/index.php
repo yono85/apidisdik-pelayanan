@@ -10,7 +10,9 @@ class index extends Controller
     //create new id to insert data
     public function createnewid($request)
     {
-        $test = (int)$request['value'];
+        $numb = (int)$request['value'];
+        $numb++;
+
         $length = ( (int)$request['length'] - 1);
         $sprint = sprintf('%0'.$length.'s', 0);
 
@@ -26,16 +28,15 @@ class index extends Controller
             2 . $sprint  =>  1
         ];
 
-        $sprintnew = strlen($test) === (int)$request['length'] ? substr($test, 1) : $test;
+        $sprintnew = strlen($numb) === (int)$request['length'] ? substr($numb, 1) : $numb;
 
         foreach($condition as $row => $val)
         {
-            if( $test < $row )
+            if( $numb < $row )
             {
                 $value = $val . sprintf('%0'.$length.'s', $sprintnew);;
             }
         }
-
 
         return $value;
     }

@@ -13,20 +13,6 @@
 |
 */
 
-// $router->get('/', function () use ($router) {
-//     return $router->app->version();
-// });
-
-// $router->group(['middleware'=>'cekingrequest'],function($router)
-// {
-
-//     $router->get('/', function()
-//     {
-//         return 'ok';
-//     });
-
-// });
-
 
 //
 $router->group(['prefix' => 'api',  'middleware' => 'cekrequest'],function($router){
@@ -42,14 +28,3 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','auth']],function($
 });
 
 
-//testing
-// $router->post('/testing/upload', 'testing\upload\index@image');
-
-$router->get('/', 'front\index@main');
-
-//any get url
-$router->get('/{any}', 'error\page\index@get');
-$router->post('/{any}', 'error\page\index@post');
-
-// Route::get('/{any}', 'errors\page\index@main')->where('any', '.*');
-// Route::post('/{any}', 'errors\page\index@main')->where('any', '.*');
