@@ -11,8 +11,6 @@ class CekRequest
 
     public function handle($request, Closure $next)
     {
-
-    
         if( $request->method() === 'GET' ) //ceking method GET
         {
             

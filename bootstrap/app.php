@@ -87,7 +87,8 @@ $app->middleware([
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     // 'jwtverif' => App\Http\Middleware\JwtMiddleware::class,
-    'cekrequest' => App\Http\Middleware\CekRequest::class
+    'cekrequest' => App\Http\Middleware\CekRequest::class,
+    'cekKeyAccount' => App\Http\Middleware\cekKeyAccount::class
 ]);
 
 /*

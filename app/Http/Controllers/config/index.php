@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 class index extends Controller
 {
 
-    
     //create new id to insert data
     public function createnewid($request)
     {

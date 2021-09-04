@@ -17,6 +17,7 @@
 //
 $router->group(['prefix' => 'api',  'middleware' => 'cekrequest'],function($router){
     $router->post('/login', 'access\manage@login');
+    $router->post('/forgetpassword', 'access\manage@forgetpassword');
 });
 
 
@@ -28,3 +29,7 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','auth']],function($
 });
 
 
+$router->group(['prefix' => '/inject',  'middleware' => ['cekrequest','cekKeyAccount']],function($router){
+    // $router->group(['prefix' => 'api',  'middleware' => ['cekrequest','cekKeyAccount']], function($router){
+    $router->post('/resetpassword', 'data\inject@resetpassword');
+});
