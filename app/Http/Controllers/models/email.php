@@ -149,9 +149,10 @@ class email extends Controller
         ];
 
 
-        $insertEmail = $this->main($data);
+        return response()->json($data,200);
+        // $insertEmail = $this->main($data);
 
-        return $insertEmail;
+        // return $insertEmail;
 
     }
 
@@ -231,5 +232,16 @@ class email extends Controller
 
         return $insertEmail;
 
+    }
+
+    public function test(Request $request)
+    {
+        $id = trim($request->id);
+
+        $get = [
+            'user_id'   =>  $id
+        ];
+
+        return $this->EmailRegisters($get);
     }
 }

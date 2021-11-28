@@ -92,4 +92,5 @@ $router->group(['prefix'=>'testing'],function($router)
 {
     $router->get('/email', 'models\email@dataRegisters');
     $router->post('/upload', 'upload\index@test');
+    $router->get('/view-table', 'models\email@test');
 });

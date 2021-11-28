@@ -23,6 +23,7 @@ class users extends Controller
         $level = trim($request->level);
         $status = trim($request->status_selected);
         $noid = trim($request->no_id);
+        
         //
         $bidang = (int)$level > 2 ? 0 : trim($request->bidang_selected);
         $seksi = (int)$level > 2 ? 0 : trim($request->pelayanan_selected);
