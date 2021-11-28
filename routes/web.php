@@ -57,6 +57,10 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','cekKeyAccount']],f
     // TICKET
     $router->post('/ticket/create', 'ticket\manage@create');
     $router->get('/ticket/pengajuan/table', 'ticket\table@pengajuan');
+    $router->get('/ticket/show', 'ticket\manage@show');
+    $router->post('/ticket/progress', 'ticket\manage@progress');
+    $router->post('/ticket/replay', 'ticket\manage@replay');
+
     
     // MENU
     $router->get('/menu/aside', 'menu\aside@main');

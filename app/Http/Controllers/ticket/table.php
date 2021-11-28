@@ -113,7 +113,7 @@ class table extends Controller
                         'type'      =>  $rowx->type === 1 ? 'progress' : 'done',
                         'date'      =>  $Config->timeago($rowx->date),
                         'user'      =>  $rowx->user_name,
-                        'color'     =>  $row->type === 1? 'orange' : 'green'
+                        'color'     =>  $rowx->type === 1 ? 'orange' : 'green'
                     ];
                 }
             }
