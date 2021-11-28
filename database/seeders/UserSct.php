@@ -34,6 +34,7 @@ class UserSct extends Seeder
             $add            =   new tblUsers;
             $add->id        =   $newid;
             $add->token     =   md5('bukaduonks');
+            $add->username  =   'admin85';
             $add->name      =   'Yono Cahyono';
             $add->gender    =   1;
             $add->birth     =   '1985-11-05';

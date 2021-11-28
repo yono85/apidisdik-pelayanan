@@ -15,6 +15,7 @@ class CreatePelayanansTable extends Migration
     {
         Schema::create('pelayanans', function (Blueprint $table) {
             $table->integer('id')->primary();
+            $table->integer('bidang_id');
             $table->integer('sub_id');
             $table->string('name');
             $table->text('decription');
