@@ -48,6 +48,7 @@ class UserSct extends Seeder
             $add->noid      =   '';
             $add->company_id    =   0;
             $add->register_status   =   1;
+            $add->register_file =   1;
             $add->status            =   1;
             $add->save();
         }
