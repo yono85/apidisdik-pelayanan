@@ -42,6 +42,10 @@ class UserSct extends Seeder
             $add->password  =   Hash::make('buka85');
             $add->level     =   9;
             $add->sublevel  =   0;
+            $add->seksi     = 0;
+            $add->set_bidang = 0;
+            $add->type      =   0;
+            $add->noid      =   '';
             $add->company_id    =   0;
             $add->register_status   =   1;
             $add->status            =   1;
