@@ -1,7 +1,6 @@
 <?php
 
 /** @var \Laravel\Lumen\Routing\Router $router */
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -13,11 +12,61 @@
 |
 */
 
-
 //
-$router->group(['prefix' => 'api',  'middleware' => 'cekrequest'],function($router){
+$router->group(['prefix' => 'api',  'middleware' =>'cekrequest'],function($router){
     $router->post('/login', 'access\manage@login');
     $router->post('/forgetpassword', 'access\manage@forgetpassword');
+
+    //registers
+    $router->post('/registers/adm-disdik', 'access\registers@disdik');
+    $router->post('/registers/adm-sch', 'access\registers@school');
+
+    // data
+    $router->get('/data/getbidang', 'data\user\component@bidang');
+    $router->get('/data/getpelayanan', 'data\user\component@pelayanan');
+    $router->get('/data/ticket/getbidang', 'data\user\component@bidangByUser');
+
+});
+
+$router->group(['prefix'=>'api', 'middleware'=>['cekrequest','cekKeyAccount']],function($router)
+{
+
+    // REGISTERS
+    $router->get('/registers/success', 'access\registers@success');
+    $router->post('/registers/resend-verify', 'access\registers@resendVerify');
+
+    //VERIFICATION
+    $router->get('/registers/verification', 'access\registers@pageVerification');
+    $router->post('/account/verification', 'access\registers@verification');
+
+    // CHANGE PASSWORD
+    $router->get('/account/checkresetpassword', 'account\index@checkresetpassword');
+    $router->post('/account/changedpassword', 'account\index@resetPassword');
+
+
+    //SEND EMAIL
+    // $router->post('/send/email/verify', 'email\manage@registers');
+    // $router->post('/send/emailid', 'email\manage@main');
+
+
+    //SCHOOLS
+    $router->get('/schools/list', 'schools\index@lists');
+
+
+    // TICKET
+    $router->post('/ticket/create', 'ticket\manage@create');
+    $router->get('/ticket/pengajuan/table', 'ticket\table@pengajuan');
+    
+    // MENU
+    $router->get('/menu/aside', 'menu\aside@main');
+    // $router->post('/registers/verify-email', 'access\manage@registerVerify');
+});
+
+
+// FOR SEND EMAIL
+$router->group(['prefix'=>'api/send/email', 'middleware'=>['cekrequest','cekKeyAccount']],function($router)
+{
+    $router->post('/', 'email\manage@main');
 });
 
 
@@ -29,7 +78,17 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','auth']],function($
 });
 
 
+//
 $router->group(['prefix' => '/inject',  'middleware' => ['cekrequest','cekKeyAccount']],function($router){
     // $router->group(['prefix' => 'api',  'middleware' => ['cekrequest','cekKeyAccount']], function($router){
     $router->post('/resetpassword', 'data\inject@resetpassword');
+});
+
+
+
+// TESTING
+$router->group(['prefix'=>'testing'],function($router)
+{
+    $router->get('/email', 'models\email@dataRegisters');
+    $router->post('/upload', 'upload\index@test');
 });

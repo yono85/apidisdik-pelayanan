@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserLoginsTable extends Migration
+class CreateSubPelayanansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateUserLoginsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_logins', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+        Schema::create('sub_pelayanans', function (Blueprint $table) {
+            $table->integer('id')->primary();
+            $table->integer('level');
+            $table->integer('sublevel');
+            $table->string('name');
+            $table->text('description');
             $table->bigInteger('user_id');
-            $table->string('token');
-            $table->text('token_jwt');
-            $table->integer('logout');
-            $table->string('logout_date');
             $table->timestamps();
             $table->integer('status');
         });
@@ -32,6 +32,6 @@ class CreateUserLoginsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('log_users');
+        Schema::dropIfExists('sub_pelayanans');
     }
 }

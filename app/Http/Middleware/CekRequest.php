@@ -44,7 +44,7 @@ class CekRequest
     public function methodget($request)
     {
 
-        $message = $request->header('Content-Type') != 'application/json' ?  'Error! Harap gunakan Content-Type="application/json" dan row data JSON pada request anda' : '';
+        $message = $request->header('Content-Type') !== 'application/json' ?  'Error! Harap gunakan Content-Type="application/json" dan row data JSON pada request anda' : '';
 
 
         return $message;
@@ -56,9 +56,14 @@ class CekRequest
     public function methodpost($request)
     {
 
+        // $header = $request->header('Content-Type');
+        // $arrtype = ['application/json', 'multipart/form-data'];
+        // $cektype = array_search($header, $arrtype) === false ? 0 : 1;
+
         $header = $request->header('Content-Type');
+        $cheader = explode(";", $header);
         $arrtype = ['application/json', 'multipart/form-data'];
-        $cektype = array_search($header, $arrtype) === false ? 0 : 1;
+        $cektype = array_search($cheader[0], $arrtype) === false ? 0 : 1;
 
         // not 'application/json', 'multipart/form-data'
         if( $cektype == 0 )

@@ -58,7 +58,7 @@ class Authenticate
             {
 
                 $token = explode(' ', $request->header('Authorization'))[1];
-                $ceking = DB::table('logins')
+                $ceking = DB::table('user_logins')
                 ->where([
                     'token_jwt'     =>  $token,
                     'status'        =>  0
@@ -72,6 +72,8 @@ class Authenticate
                     ];
                     return response($data, 401);
                 }
+
+                
             }
 
             

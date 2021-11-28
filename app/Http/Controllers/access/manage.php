@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\config\index as Config;
 use App\users as tblUsers;
 use App\user_resetpasswords as tblUserResetPasswords;
+use App\email_sender_tables as tblEmailSenderTables;
+use App\user_logins as tblUserLogins;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +26,7 @@ class manage extends Controller
         //GET DATA USERS
         $getData = tblUsers::from('users as u')
         ->select(
-            'u.id', 'u.password', 'u.register_status',
+            'u.id', 'u.password', 'u.register_status', 'u.token',
             DB::raw('IFNULL(ur.token, "") as register_token')
         )
         ->leftJoin('user_registers as ur', function($join)
@@ -49,6 +51,17 @@ class manage extends Controller
             return response()->json($data, 404);
         }
 
+
+        //CEK STATUS REGISTRASI
+        if( $getData->register_status == 0)
+        {
+            $data = [
+                'message'   =>  'Akun anda menunggu verifikasi silahkan lakukan <a href="/registers/success?token='.$getData->token.'">Verifikasi disini</a>'
+            ];
+
+            return response()->json($data,401);
+        }
+
         //CEK PASSWORD
         $pwd = $getData->password;
         $cekPWD = Hash::check($password, $pwd) ? 1 : 0;
@@ -62,15 +75,7 @@ class manage extends Controller
             return response()->json($data, 404);
         }
 
-        //CEK STATUS REGISTRASI
-        if( $getData->register_status == 0)
-        {
-            $data = [
-                'message'   =>  'Akun anda menunggu verifikasi silahkan lakukan <a href="/register/success?token='.$getData->register_token.'">Verifikasi disini</a>'
-            ];
-
-            return response()->json($data,404);
-        }
+        
 
 
         //DATA LOGIN
@@ -124,8 +129,8 @@ class manage extends Controller
         $data = [
             'message'       =>  'Login Success',
             'response'      =>  [
-                'account'           =>  $account,
-                'token_jwt'         =>  $token
+                'account'       =>  $account,
+                'token'         =>  $token
             ]
         ];
 
@@ -143,7 +148,7 @@ class manage extends Controller
         //GET DATA USERS
         $getData = tblUsers::from('users as u')
         ->select(
-            'u.id', 'u.password', 'u.register_status',
+            'u.id', 'u.password', 'u.register_status', 'u.token',
             DB::raw('IFNULL(ur.token, "") as register_token')
         )
         ->leftJoin('user_registers as ur', function($join)
@@ -172,7 +177,7 @@ class manage extends Controller
         if( $getData->register_status == 0)
         {
             $data = [
-                'message'   =>  'Akun anda menunggu verifikasi silahkan lakukan <a href="/register/success?token='.$getData->register_token.'">Verifikasi disini</a>'
+                'message'   =>  'Akun anda menunggu verifikasi silahkan lakukan <a href="/registers/success?token='.$getData->token.'">Verifikasi disini</a>'
             ];
 
             return response()->json($data,404);
@@ -205,18 +210,40 @@ class manage extends Controller
         $data = [
             'message'       =>  '',
             'response'      =>  [
-                'resetpassword_id'  =>  $insreset
+                'resetid'   =>  $insreset['resetid'],
+                'sendid'            =>  $insreset['sendid'],
+                'token'         =>  $insreset['token']
             ]
         ];
 
         return response()->json($data,200);
     }
 
-
-    //GUARD
+        //GUARD
     public function guard()
     {
         return app('auth')->guard();
+    }
+
+
+    public function logout(Request $request)
+    {
+        $getdata = tblUserLogins::where([
+            'token_jwt'     =>  $request->token
+        ])
+        ->update([
+            'logout'        =>  1,
+            'logout_date'   =>  date('Y-m-d H:i:s', time())
+        ]);
+        
+        $data = [
+            'message'       =>  '',
+            'response'      =>  [
+                'redirect'      =>  '/login'
+            ]
+        ];
+
+        return response()->json($data,200);
     }
 
 }
