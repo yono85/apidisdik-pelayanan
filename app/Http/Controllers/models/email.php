@@ -149,10 +149,10 @@ class email extends Controller
         ];
 
 
-        return response()->json($data,200);
-        // $insertEmail = $this->main($data);
+        // return response()->json($data,200);
+        $insertEmail = $this->main($data);
 
-        // return $insertEmail;
+        return $insertEmail;
 
     }
 
