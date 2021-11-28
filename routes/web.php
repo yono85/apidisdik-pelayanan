@@ -25,6 +25,7 @@ $router->group(['prefix' => 'api',  'middleware' =>'cekrequest'],function($route
     $router->get('/data/getbidang', 'data\user\component@bidang');
     $router->get('/data/getpelayanan', 'data\user\component@pelayanan');
     $router->get('/data/ticket/getbidang', 'data\user\component@bidangByUser');
+    $router->get('/data/subpelayanan', 'data\user\component@subPelayanan');
 
 });
 

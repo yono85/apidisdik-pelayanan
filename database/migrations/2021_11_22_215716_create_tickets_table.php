@@ -20,6 +20,7 @@ class CreateTicketsTable extends Migration
             $table->integer('level');
             $table->integer('type'); //
             $table->integer('subtype');
+            $table->integer('pelayanan');
             $table->text('detail');
             $table->text('field');
             $table->text('url_file');

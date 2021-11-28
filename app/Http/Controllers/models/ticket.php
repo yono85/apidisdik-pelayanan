@@ -30,6 +30,7 @@ class ticket extends Controller
         $addnew->level          =   trim($request->level);
         $addnew->type           =   trim($request->bidang_selected);
         $addnew->subtype        =   trim($request->seksi_selected);
+        $addnew->pelayanan      =   trim($request->pelayanan_selected);
         $addnew->detail         =   trim($request->text);
         $addnew->field          =   "";
         $addnew->url_file       =   "";

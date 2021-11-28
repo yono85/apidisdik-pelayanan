@@ -36,7 +36,8 @@ class table extends Controller
             'u.name as user_name', 'u.type', 'u.noid',
             'cp.name as company_name',
             'us.name as bidang',
-            'sp.name as pelayanan'
+            'sp.name as seksi',
+            'p.name as pelayanan'
         )
         ->leftJoin('users as u', function($join)
         {
@@ -53,6 +54,10 @@ class table extends Controller
         ->leftJoin('sub_pelayanans as sp', function($join)
         {
             $join->on('sp.id', '=', 't.subtype');
+        })
+        ->leftJoin('pelayanans as p', function($join)
+        {
+            $join->on('p.id', '=', 't.pelayanan');
         })
         ->where([
             ['t.kode', 'like', '%' . $src . '%']
@@ -124,6 +129,7 @@ class table extends Controller
                 'user_name' =>  $row->user_name,
                 'user_company'  =>  $row->company_name,
                 'bidang'        =>  $row->bidang,
+                'seksi'     =>  $row->seksi,
                 'pelayanan'     =>  $row->pelayanan,
                 'progress'      =>  (int)$row->progress,
                 'detail'        =>  $row->detail,

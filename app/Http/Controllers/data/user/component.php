@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\user_sublevels as tblUserSublevels;
 use App\sub_pelayanans as tblSubPelayanans;
+use App\pelayanans as tblPelayanans;
 
 class component extends Controller
 {
@@ -76,6 +77,27 @@ class component extends Controller
         ];
 
         return response()->json($data, 200);
+    }
+
+
+    public function subPelayanan(Request $request)
+    {
+        $bidang = trim($request->bidang);
+        $sub = trim($request->sub);
+
+        $getdata = tblPelayanans::where([
+            'bidang_id'     =>  $bidang,
+            'sub_id'        =>  $sub,
+            'status'        =>  1
+        ])->get();
+
+        $data = [
+            'message'       =>  '',
+            'response'      =>  $getdata
+        ];
+
+        return response()->json($data, 200);
+
     }
 
 }
