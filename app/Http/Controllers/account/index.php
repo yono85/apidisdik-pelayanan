@@ -48,11 +48,12 @@ class index extends Controller
             'name'          =>  $account['name'],
             'email'         =>  $account['email'],
             'level'         =>  $account['level'],
-            'sublevel'      =>  $account['sublevel'],
+            'bidang'        =>  $account['sublevel'],
+            'seksi'         =>  $account['seksi'],
+            'pelayanan'     =>  $account['set_bidang'],
             'image'         =>  $Config->apps()['URL_API'] . ( $getimg === null ? '/images/none/user.png' : $getimg->url),
             'admin'         =>  $admin,
-            'company_id'        =>  $account['company_id'],
-            'set_bidang'        =>  $account['set_bidang']
+            'company_id'    =>  $account['company_id']
         ];
 
         return $data;

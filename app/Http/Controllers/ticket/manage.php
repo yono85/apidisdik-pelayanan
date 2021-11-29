@@ -82,7 +82,7 @@ class manage extends Controller
 
         $getreplay = DB::table('vw_ticket_replays as tr')
         ->select(
-            'tr.id', 'tr.type', 'tr.date',
+            'tr.id', 'tr.type', 'tr.date', 'tr.text', 'tr.url_file',
             'u.name as user_name'
         )
         ->leftJoin('users as u', function($join)
@@ -104,7 +104,9 @@ class manage extends Controller
                         'type'      =>  $rowx->type === 1 ? 'progress' : 'done',
                         'date'      =>  $Config->timeago($rowx->date),
                         'user'      =>  $rowx->user_name,
-                        'color'     =>  $rowx->type === 1? 'orange' : 'green'
+                        'color'     =>  $rowx->type === 1? 'orange' : 'green',
+                        'detail'    =>  $rowx->text,
+                        'url'       =>  $rowx->url_file
                     ];
                 }
             }
