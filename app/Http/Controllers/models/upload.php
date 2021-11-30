@@ -25,13 +25,14 @@ class upload extends Controller
         $token = md5($newid);
         $namefile = $token . '.' . $ext;
 
+        $url_file = env('URL_API') . '/' . $request['folder'] . $ext . '/' .$namefile;
 
         $addnew             =   new tblUploadFiles;
         $addnew->id         =   $newid;
-        $addnew->type       =   $request['type'];
+        $addnew->type       =   $request['type']; // 1 = register, 2 replay
         $addnew->token      =   $token;
         $addnew->extentions =   $ext;
-        $addnew->url        =   '/upload/' . $ext . '/' .$namefile;
+        $addnew->url        =   $url_file;
         $addnew->user_id    =   $user_id;
         $addnew->status     =   1;
         $addnew->save();
@@ -43,7 +44,12 @@ class upload extends Controller
         $addUpload = $addUpload->main([
             'file'      =>  $file,
             'name'      =>  $namefile,
-            'path'      =>  'upload/' . $dir . '/'
+            'path'      =>  $request['folder'] . $dir . '/'
         ]);
+
+        return $data = [ 
+            'id'            =>  $newid,
+            'url'           =>  $url_file
+        ];
     }
 }

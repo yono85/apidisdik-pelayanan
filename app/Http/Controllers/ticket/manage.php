@@ -188,6 +188,26 @@ class manage extends Controller
         $add = new \App\Http\Controllers\models\ticket;
         $add = $add->replay($send);
 
+        //upload file
+        if( $request->file('file') != "")
+        {
+            $modelUpload = new \App\Http\Controllers\models\upload;
+            $modelUpload = $modelUpload->main([
+                'file'      =>  $request->file('file'),
+                'type'      =>  2, //replay,
+                'folder'    =>  'upload/replay/',
+                'user_id'   =>  $request->user_id
+            ]);
+
+            $updatereply = tblTicketReplays::where([
+                'id'        =>  $add['id']
+            ])
+            ->update([
+                'url_file'      =>  $modelUpload['url']
+            ]);
+
+        }
+
         //notif
 
         //update

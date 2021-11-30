@@ -70,7 +70,9 @@ class ticket extends Controller
         $addnew->status         =   1;
         $addnew->save();
 
-        return $newid;
+        return $data = [
+            'id'        =>  $newid
+        ];
 
     }
 }

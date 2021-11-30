@@ -212,7 +212,8 @@ class registers extends Controller
         $modelUpload = new \App\Http\Controllers\models\upload;
         $modelUpload = $modelUpload->main([
             'file'      =>  $request->file('file'),
-            'type'      =>  1, //registers
+            'type'      =>  1, //registers,
+            'folder'    =>  'upload/',
             'user_id'   =>  $adduser['id']
         ]);
 
