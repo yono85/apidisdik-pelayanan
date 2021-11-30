@@ -80,40 +80,40 @@ class manage extends Controller
         ])->first();
 
 
-        $getreplay = DB::table('vw_ticket_replays as tr')
-        ->select(
-            'tr.id', 'tr.type', 'tr.date', 'tr.text', 'tr.url_file',
-            'u.name as user_name'
-        )
-        ->leftJoin('users as u', function($join)
-        {
-            $join->on('u.id', '=', 'tr.user_id');
-        })
-        ->where([
-            'tr.ticket_id'  =>  $getdata->id,
-            'tr.status'     =>  1
-        ])
-        ->get();
+        // $getreplay = DB::table('vw_ticket_replays as tr')
+        // ->select(
+        //     'tr.id', 'tr.type', 'tr.date', 'tr.text', 'tr.url_file',
+        //     'u.name as user_name'
+        // )
+        // ->leftJoin('users as u', function($join)
+        // {
+        //     $join->on('u.id', '=', 'tr.user_id');
+        // })
+        // ->where([
+        //     'tr.ticket_id'  =>  $getdata->id,
+        //     'tr.status'     =>  1
+        // ])
+        // ->get();
 
-        if( count($getreplay) > 0)
-            {
-                foreach($getreplay as $rowx)
-                {
-                    $replay[] = [
-                        'id'        =>  $rowx->id,
-                        'type'      =>  $rowx->type === 1 ? 'progress' : 'done',
-                        'date'      =>  $Config->timeago($rowx->date),
-                        'user'      =>  $rowx->user_name,
-                        'color'     =>  $rowx->type === 1? 'orange' : 'green',
-                        'detail'    =>  $rowx->text,
-                        'url'       =>  $rowx->url_file
-                    ];
-                }
-            }
-            else
-            {
-                $replay = '';
-            }
+        // if( count($getreplay) > 0)
+        //     {
+        //         foreach($getreplay as $rowx)
+        //         {
+        //             $replay[] = [
+        //                 'id'        =>  $rowx->id,
+        //                 'type'      =>  $rowx->type === 1 ? 'progress' : 'done',
+        //                 'date'      =>  $Config->timeago($rowx->date),
+        //                 'user'      =>  $rowx->user_name,
+        //                 'color'     =>  $rowx->type === 1? 'orange' : 'green',
+        //                 'detail'    =>  $rowx->text,
+        //                 'url'       =>  $rowx->url_file
+        //             ];
+        //         }
+        //     }
+        //     else
+        //     {
+        //         $replay = '';
+        //     }
 
 
         //
@@ -129,7 +129,7 @@ class manage extends Controller
                 'user_id'       =>  $getdata->user_id,
                 'user_type'          =>  ($getdata->noid === "" ? "" : $Config->typePegawai($getdata->utype) . ':' . $getdata->noid),
                 'user_company'  =>  $getdata->company_name,
-                'replay'        =>  $replay
+                'replay'        =>  $this->showreply($getdata->id)
             ]
         ];
 
@@ -166,7 +166,8 @@ class manage extends Controller
         ]);
 
         $data = [
-            'message'       =>  ''
+            'message'       =>  '',
+            'list'          =>  $this->showreply($request->ticket_id)
         ];
 
         return response()->json($data, 200);
@@ -198,9 +199,55 @@ class manage extends Controller
         ]);
 
         $data = [
-            'message'       =>  ''
+            'message'       =>  '',
+            'list'          =>  $this->showreply($request->ticket_id)
         ];
 
         return response()->json($data, 200);
+    }
+
+    //
+    public function showreply($request)
+    {
+        $Config = new Config;
+
+        //
+        $getreplay = DB::table('vw_ticket_replays as tr')
+        ->select(
+            'tr.id', 'tr.type', 'tr.date', 'tr.text', 'tr.url_file',
+            'u.name as user_name'
+        )
+        ->leftJoin('users as u', function($join)
+        {
+            $join->on('u.id', '=', 'tr.user_id');
+        })
+        ->where([
+            'tr.ticket_id'  =>  $request,
+            'tr.status'     =>  1
+        ])
+        ->get();
+
+        if( count($getreplay) > 0)
+        {
+            foreach($getreplay as $row)
+            {
+                $replay[] = [
+                    'id'        =>  $row->id,
+                    'type'      =>  $row->type === 1 ? 'progress' : 'done',
+                    'date'      =>  $Config->timeago($row->date),
+                    'user'      =>  $row->user_name,
+                    'color'     =>  $row->type === 1? 'orange' : 'green',
+                    'detail'    =>  $row->text,
+                    'url'       =>  $row->url_file
+                ];
+            }
+        }
+        else
+        {
+            $replay = '';
+        }
+
+        return $replay;
+        
     }
 }
