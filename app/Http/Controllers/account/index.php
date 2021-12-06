@@ -19,18 +19,18 @@ class index extends Controller
         $Config = new Config;
 
         //
-        if( $account['level'] == 1 ) // admin disdik
-        {
-            $admin = $this->aDisdik($request);
-        }
-        elseif( $account['level'] == 2)
-        {
-            $admin = $this->OPS($request);
-        }
-        else
-        {
-            $admin = '';
-        }
+        // if( $account['level'] == 1 ) // admin disdik
+        // {
+        //     $admin = $this->aDisdik($request);
+        // }
+        // elseif( $account['level'] == 2)
+        // {
+        //     $admin = $this->OPS($request);
+        // }
+        // else
+        // {
+        //     $admin = '';
+        // }
 
 
         //get image
@@ -52,8 +52,42 @@ class index extends Controller
             'seksi'         =>  $account['seksi'],
             'pelayanan'     =>  $account['set_bidang'],
             'image'         =>  $Config->apps()['URL_API'] . ( $getimg === null ? '/images/none/user.png' : $getimg->url),
-            'admin'         =>  $admin,
-            'company_id'    =>  $account['company_id']
+            // 'admin'         =>  $admin,
+            'company_id'    =>  $account['company_id'],
+            'verify'        =>  $account['register_file']
+        ];
+
+        return $data;
+    }
+
+    public function showToken($request)
+    {
+
+        $Config = new Config;
+
+        //
+        $account = tblUsers::where([
+            'token'     =>  $request
+        ])->first();
+
+        $getimg = tblUserImages::where([
+            'user_id'           =>  $account->id,
+            'status'            =>  1
+        ])->first();
+        // 
+        $data = [
+            'id'            =>  $account->id,
+            'key'           =>  $account->token,
+            'name'          =>  $account->name,
+            'email'         =>  $account->email,
+            'level'         =>  $account->level,
+            'bidang'        =>  $account->sublevel,
+            'seksi'         =>  $account->seksi,
+            'pelayanan'     =>  $account->set_bidang,
+            'image'         =>  $Config->apps()['URL_API'] . ( $getimg === null ? '/images/none/user.png' : $getimg->url),
+            // 'admin'         =>  $admin,
+            'company_id'    =>  $account->company_id,
+            'verify'        =>  $account->register_file
         ];
 
         return $data;

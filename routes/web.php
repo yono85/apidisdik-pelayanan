@@ -19,7 +19,7 @@ $router->group(['prefix' => 'api',  'middleware' =>'cekrequest'],function($route
 
     //registers
     $router->post('/registers/adm-disdik', 'access\registers@disdik');
-    $router->post('/registers/adm-sch', 'access\registers@school');
+    // $router->post('/registers/adm-sch', 'access\registers@school');
 
     // data
     $router->get('/data/getbidang', 'data\user\component@bidang');
@@ -64,6 +64,10 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','cekKeyAccount']],f
     $router->post('/ticket/replay', 'ticket\manage@replay');
 
     
+    //VERIFY ACCOUNT
+    $router->get('/account/check-verify-admin', 'account\manage@checkVerifyAdmin');
+    $router->post('/account/login-verify-admin', 'account\manage@loginVerify');
+
     // MENU
     $router->get('/menu/aside', 'menu\aside@main');
     // $router->post('/registers/verify-email', 'access\manage@registerVerify');

@@ -127,7 +127,7 @@ class manage extends Controller
 
         //DATA
         $data = [
-            'message'       =>  'Login Success',
+            'message'       =>  '',
             'response'      =>  [
                 'account'       =>  $account,
                 'token'         =>  $token
