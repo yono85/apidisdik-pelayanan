@@ -26,6 +26,7 @@ $router->group(['prefix' => 'api',  'middleware' =>'cekrequest'],function($route
     $router->get('/data/getpelayanan', 'data\user\component@pelayanan');
     $router->get('/data/ticket/getbidang', 'data\user\component@bidangByUser');
     $router->get('/data/subpelayanan', 'data\user\component@subPelayanan');
+    $router->get('/data/teller/list', 'data\user\component@teller');
 
 });
 
@@ -59,18 +60,32 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','cekKeyAccount']],f
     $router->get('/ticket/pengajuan/table', 'ticket\table@pengajuan');
     $router->get('/ticket/table/pengajuan', 'ticket\table@pengajuan');
     $router->get('/ticket/table/permintaan', 'ticket\table@permintaan');
+    $router->get('/ticket/table/visit', 'ticket\table@visit');
     $router->get('/ticket/show', 'ticket\manage@show');
     $router->post('/ticket/progress', 'ticket\manage@progress');
     $router->post('/ticket/replay', 'ticket\manage@replay');
+    $router->post('/ticket/visit/create', 'ticket\manage@createvisit');
 
+    //PENGGUNA
+    $router->get('/pengguna/table', 'pengguna\table@main');
+    $router->post('/pengguna/create-admin', 'pengguna\manage@create');
     
     //VERIFY ACCOUNT
     $router->get('/account/check-verify-admin', 'account\manage@checkVerifyAdmin');
     $router->post('/account/login-verify-admin', 'account\manage@loginVerify');
+    $router->get('/account/view-verify-admin', 'account\manage@viewVerifyAdmin'); 
+    $router->post('/account/verify-cek-file', 'account\manage@verifyFile'); 
 
     // MENU
     $router->get('/menu/aside', 'menu\aside@main');
     // $router->post('/registers/verify-email', 'access\manage@registerVerify');
+
+
+});
+
+$router->group(['prefix'=>'api/print', 'middleware'=>['cekrequest','cekKeyAccount']],function($router)
+{
+    $router->get('/ticket', 'ticket\manage@print');
 });
 
 

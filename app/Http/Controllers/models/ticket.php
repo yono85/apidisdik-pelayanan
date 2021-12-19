@@ -26,6 +26,7 @@ class ticket extends Controller
         //
         $addnew                 =   new tblTickets;
         $addnew->id             =   $newid;
+        $addnew->type_ticket    =   0;
         $addnew->kode           =   date('ymd', time() ) . $Config->createuniq(['length'=>6,'value'=>$count]);
         $addnew->token          =   $token;
         $addnew->level          =   trim($request->level);
@@ -36,6 +37,40 @@ class ticket extends Controller
         $addnew->field          =   "";
         $addnew->url_file       =   "";
         $addnew->user_id        =   trim($request->user_id);
+        $addnew->progress       =   0;
+        $addnew->date           =   date('Y-m-d H:i:s', time());
+        $addnew->status         =   1;
+        $addnew->save();
+    }
+
+    public function visit($request)
+    {
+        $Config = new Config;
+
+        //create
+        $count = tblTickets::count();
+        $newid = $Config->createnewid([
+            'value'     =>  $count,
+            'length'    =>  15
+        ]);
+
+        //
+        $token = md5($newid);
+
+        //
+        $addnew                 =   new tblTickets;
+        $addnew->id             =   $newid;
+        $addnew->type_ticket    =   1;
+        $addnew->kode           =   date('ymd', time() ) . $Config->createuniq(['length'=>6,'value'=>$count]);
+        $addnew->token          =   $token;
+        $addnew->level          =   trim($request["level"]);
+        $addnew->type           =   trim($request["bidang"]);
+        $addnew->subtype        =   trim($request["seksi"]);
+        $addnew->pelayanan      =   trim($request["pelayanan"]);
+        $addnew->detail         =   trim($request["detail"]);
+        $addnew->field          =   json_encode($request["field"]);
+        $addnew->url_file       =   "";
+        $addnew->user_id        =   trim($request["user_id"]);
         $addnew->progress       =   0;
         $addnew->date           =   date('Y-m-d H:i:s', time());
         $addnew->status         =   1;

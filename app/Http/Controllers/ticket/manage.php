@@ -5,7 +5,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\config\index as Config;
 use App\tickets as tblTickets;
 use App\ticket_replays as tblTicketReplays;
+use App\schools as tblSchools;
 use DB;
+
 class manage extends Controller
 {
     //
@@ -50,6 +52,57 @@ class manage extends Controller
         return response()->json($data,200);
     }
 
+    public function createvisit(Request $request)
+    {
+
+        $getschool = tblSchools::where([
+            "id"            =>  trim($request->school_id)
+        ])->first();
+
+        //
+        $visit = [
+            "name"          =>  trim($request->visit_name),
+            "nik"           =>  trim($request->visit_nik),
+            "phone"         =>  trim($request->visit_phone),
+            "address"       =>  trim($request->visit_address)           
+        ];
+
+        //
+        $school = [
+            "name"          =>  $getschool->name,
+            "npsn"          =>  $getschool->npsn,
+            "nosurat"       =>  trim($request->nosurat),
+            "tglsurat"      =>  trim($request->tglsurat),
+            "isisurat"      =>  trim($request->isisurat)
+        ];
+
+        $field = [
+            "visit"     =>  $visit,
+            "school"    =>  $school
+        ];
+
+        $datanew = [
+            "level"             =>  trim($request->level),
+            "bidang"            =>  trim($request->bidang_selected),
+            "seksi"              => trim($request->seksi_selected),
+            "pelayanan"         =>  trim($request->pelayanan_selected),
+            "detail"            =>  trim($request->text),
+            "user_id"           =>  trim($request->user_id),
+            "field"             =>  $field
+        ];
+
+        $create = new \App\Http\Controllers\models\ticket;
+        $create = $create->visit($datanew);
+
+        //
+        $data = [
+            'message'       =>  'Tiket berhasil dibuat',
+            "response"      =>  $datanew
+        ];
+
+        return response()->json($data,200);
+    }
+
     //show
     public function show(Request $request)
     {
@@ -58,7 +111,7 @@ class manage extends Controller
         //
         $getdata = tblTickets::from("tickets as t")
         ->select(
-            't.id', 't.progress', 't.kode', 't.date', 't.detail','t.token',
+            't.id', 't.type_ticket', 't.field', 't.progress', 't.kode', 't.date', 't.detail','t.token',
             'u.id as user_id','u.name as user_name', 'u.type as utype', 'u.noid',
             'p.name as pelayanan',
             'cp.name as company_name'
@@ -80,42 +133,16 @@ class manage extends Controller
         ])->first();
 
 
-        // $getreplay = DB::table('vw_ticket_replays as tr')
-        // ->select(
-        //     'tr.id', 'tr.type', 'tr.date', 'tr.text', 'tr.url_file',
-        //     'u.name as user_name'
-        // )
-        // ->leftJoin('users as u', function($join)
-        // {
-        //     $join->on('u.id', '=', 'tr.user_id');
-        // })
-        // ->where([
-        //     'tr.ticket_id'  =>  $getdata->id,
-        //     'tr.status'     =>  1
-        // ])
-        // ->get();
-
-        // if( count($getreplay) > 0)
-        //     {
-        //         foreach($getreplay as $rowx)
-        //         {
-        //             $replay[] = [
-        //                 'id'        =>  $rowx->id,
-        //                 'type'      =>  $rowx->type === 1 ? 'progress' : 'done',
-        //                 'date'      =>  $Config->timeago($rowx->date),
-        //                 'user'      =>  $rowx->user_name,
-        //                 'color'     =>  $rowx->type === 1? 'orange' : 'green',
-        //                 'detail'    =>  $rowx->text,
-        //                 'url'       =>  $rowx->url_file
-        //             ];
-        //         }
-        //     }
-        //     else
-        //     {
-        //         $replay = '';
-        //     }
-
-
+        if( $getdata->type_ticket == "1")
+        {
+            $username   =   json_decode($getdata->field)->visit->name;
+            $company    =   json_decode($getdata->field)->school->name;
+        }
+        else
+        {
+            $username = $getdata->user_name;
+            $company = $getdata->company_name;
+        }
         //
         $data = [
             'message'       =>  '',
@@ -123,12 +150,12 @@ class manage extends Controller
                 'id'            =>  $getdata->id,
                 'status'        =>  $getdata->progress,
                 'date'          =>  $Config->timeago($getdata->date),
-                'user_name'     =>  $getdata->user_name,
+                'user_name'     =>  $username,
                 'pelayanan'     =>  $getdata->pelayanan,
                 'detail'        =>  $getdata->detail,
                 'user_id'       =>  $getdata->user_id,
-                'user_type'          =>  ($getdata->noid === "" ? "" : $Config->typePegawai($getdata->utype) . ':' . $getdata->noid),
-                'user_company'  =>  $getdata->company_name,
+                'user_type'     =>  $getdata->type_ticket === 1 ? "" : ($getdata->noid === "" ? "" : $Config->typePegawai($getdata->utype) . ':' . $getdata->noid),
+                'user_company'  =>  $company,
                 'replay'        =>  $this->showreply($getdata->id)
             ]
         ];
@@ -268,6 +295,63 @@ class manage extends Controller
         }
 
         return $replay;
-        
+    }
+
+
+    //PRINT
+    public function print(Request $request)
+    {
+        $Config = new Config;
+
+        $token = trim($request->token);
+
+        $getdata = tblTickets::from("tickets as t")
+        ->select(
+            "t.kode","t.date", "t.detail", "t.field",
+            "us.name as bidang",
+            "sp.name as seksi",
+            "u.name as teller_name"
+        )
+        ->leftJoin("user_sublevels as us", function($join)
+        {
+            $join->on("us.id", "=", "t.type");
+        })
+        ->leftJoin("sub_pelayanans as sp", function($join)
+        {
+            $join->on("sp.id", "=", "t.subtype");
+        })
+        ->leftJoin("users as u", function($join)
+        {
+            $join->on("u.id", "=", "t.user_id");
+        })
+        ->where([
+            "t.token"          =>  $token
+        ])->first();
+
+
+        if( $getdata == null)
+        {
+            $data = [
+                "message"       =>  "Data tidak ditemukan"
+            ];
+    
+            return response()->json($data,404);
+
+        }
+
+        //
+        $data = [
+            "message"       =>  "",
+            "response"      =>  [
+                "code"          =>  $getdata->kode,
+                "detail"        =>  $getdata->detail,
+                "bidang"        =>  $getdata->bidang,
+                "seksi"         =>  $getdata->seksi,
+                "date"          =>  date("d/m/Y H:i", strtotime($getdata->date)),
+                "teller"        =>  $getdata->teller_name
+            ]
+        ];
+
+        return response()->json($data,200);
     }
 }

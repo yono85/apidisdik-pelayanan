@@ -72,6 +72,67 @@ class users extends Controller
     }
 
 
+    //ADD NEW ADMIN
+    public function addNewAdmin($request)
+    {
+        
+        //include 
+        $Config = new Config;
+
+        //request
+        $name = trim($request->name);
+        $email = trim($request->email);
+        $level = trim($request->level_selected);
+        $bidang = trim($request->bidang_selected);
+        $seksi = trim($request->seksi_selected);
+
+
+        $bidang = $bidang === "" ? 0 : $bidang;
+        $seksi = $seksi === "" ? 0 : $seksi;
+        
+
+        //create
+        $newid = $Config->createnewid([
+            'value'     =>  tblUsers::count(),
+            'length'    =>  15
+        ]);
+
+        $token = md5($newid);
+
+        //
+        $addnew                 = new tblUsers;
+        $addnew->id             =   $newid;
+        $addnew->token          =   $token;
+        $addnew->username       =   '';
+        $addnew->name           =   $name;
+        $addnew->gender         =   0;
+        $addnew->birth          =   '';
+        $addnew->email          =   $email;
+        $addnew->password       =   '';
+        $addnew->level          =   $level; // 9 admin, 1 disdik, 2 sudin, 3 sch, 4 teller
+        $addnew->sublevel       =   $bidang; //bidang
+        $addnew->seksi          =   $seksi; //seksi
+        $addnew->set_bidang     =   0;
+        $addnew->type           =   1;
+        $addnew->noid           =   0;
+        $addnew->company_id     =   0;
+        $addnew->register_status = 0;
+        $addnew->register_file  = 1;
+        $addnew->status         = 1;
+        $addnew->save();
+
+
+        // ID REGISTER ON TBALE
+        $data = [
+            'id'        =>  $newid,
+            'token'     =>  $token
+        ];
+
+        return $data;
+
+    }
+
+
     //
     // REGISTER
     public function userRegister($request)

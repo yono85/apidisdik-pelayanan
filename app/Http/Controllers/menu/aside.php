@@ -100,8 +100,14 @@ class aside extends Controller
                     'config'    =>  'account'
                 ]
             ],
+            '4'         =>  [
+                'menu'          =>  'dashboard,optiket,report,config,signout',
+                'submenu'       =>  [
+                    'config'    =>  'account'
+                ]
+            ],
             '9'         =>  [
-                'menu'          =>  'dashboard,tiket,report,users,config,signout',
+                'menu'          =>  'dashboard,optiket,tiket,report,users,config,signout',
                 'submenu'       =>  [
                     'tiket'     =>  'pengajuan,permintaan',
                     'config'    =>  'account'
@@ -176,6 +182,15 @@ class aside extends Controller
                     'child'         =>  '',
                     'class'         =>  ''
                 ],//
+                'optiket'     =>  [
+                    'title'         =>  'Tiket Visit',
+                    'icon'          =>  'icon fas fa-ticket-alt',
+                    'type'          =>  '',
+                    'arrow'         =>  '',
+                    'url'           =>  '/dashboard/tiket-visit',
+                    'child'         =>  '',
+                    'class'         =>  ''
+                ],//
                 'tiket'     =>  [
                     'title'         =>  'Tiket',
                     'icon'          =>  'icon fas fa-ticket-alt',
@@ -190,7 +205,7 @@ class aside extends Controller
                     'icon'          =>  'icon fa flaticon2-line-chart',
                     'type'          =>  '',
                     'arrow'         =>  '',
-                    'url'           =>  '#',
+                    'url'           =>  '/dashboard/report',
                     'child'         =>  '',
                     'class'         =>  ''
                 ],
