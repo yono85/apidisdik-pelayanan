@@ -123,7 +123,7 @@ class manage extends Controller
                 "name"          =>  $getdata->name,
                 "email"         =>  $getdata->email,
                 "company_name"  =>  $getdata->company_name,
-                "url_file"      =>  env("URL_API") . $getdata->url_file
+                "url_file"      =>  $getdata->url_file
             ]
         ];
 
