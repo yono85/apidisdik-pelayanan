@@ -26,7 +26,6 @@ class ticket extends Controller
         //
         $addnew                 =   new tblTickets;
         $addnew->id             =   $newid;
-        $addnew->type_ticket    =   0;
         $addnew->kode           =   date('ymd', time() ) . $Config->createuniq(['length'=>6,'value'=>$count]);
         $addnew->token          =   $token;
         $addnew->level          =   trim($request->level);
@@ -40,6 +39,7 @@ class ticket extends Controller
         $addnew->progress       =   0;
         $addnew->date           =   date('Y-m-d H:i:s', time());
         $addnew->status         =   1;
+        $addnew->type_ticket    =   0;
         $addnew->save();
     }
 
@@ -60,7 +60,6 @@ class ticket extends Controller
         //
         $addnew                 =   new tblTickets;
         $addnew->id             =   $newid;
-        $addnew->type_ticket    =   1;
         $addnew->kode           =   date('ymd', time() ) . $Config->createuniq(['length'=>6,'value'=>$count]);
         $addnew->token          =   $token;
         $addnew->level          =   trim($request["level"]);
@@ -74,6 +73,7 @@ class ticket extends Controller
         $addnew->progress       =   0;
         $addnew->date           =   date('Y-m-d H:i:s', time());
         $addnew->status         =   1;
+        $addnew->type_ticket    =   1;
         $addnew->save();
     }
 

@@ -15,7 +15,6 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->bigInteger('id')->primary();
-            $table->integer('type_ticket');
             $table->string('kode');
             $table->string('token');
             $table->integer('level');
@@ -30,6 +29,7 @@ class CreateTicketsTable extends Migration
             $table->timestamps();
             $table->string('date');
             $table->integer('status'); //1 active, 0 deleted
+            $table->integer('type_ticket');
         });
     }
 
