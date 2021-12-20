@@ -66,6 +66,8 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','cekKeyAccount']],f
     $router->post('/ticket/replay', 'ticket\manage@replay');
     $router->post('/ticket/visit/create', 'ticket\manage@createvisit');
 
+    $router->post('/ticket/tracking', 'ticket\manage@tracking');
+
     //PENGGUNA
     $router->get('/pengguna/table', 'pengguna\table@main');
     $router->post('/pengguna/create-admin', 'pengguna\manage@create');
@@ -79,7 +81,6 @@ $router->group(['prefix'=>'api', 'middleware'=>['cekrequest','cekKeyAccount']],f
     // MENU
     $router->get('/menu/aside', 'menu\aside@main');
     // $router->post('/registers/verify-email', 'access\manage@registerVerify');
-
 
 });
 

@@ -354,4 +354,68 @@ class manage extends Controller
 
         return response()->json($data,200);
     }
+
+
+    //TRACKING
+    public function tracking(Request $request)
+    {
+        $ticket = trim($request->ticket);
+
+        $getdata = tblTickets::where([
+            "kode"      =>  $ticket
+        ])->first();
+
+        if( $getdata == null)
+        {
+            $data = [
+                "message"       =>  "Nomor Tiket tidak ditemukan"
+            ];
+
+            return response()->json($data,404);
+        }
+
+        $list[] = [
+            "date"      =>   date("d/m/Y H:i", strtotime($getdata->date)),
+            "type"      =>  0,
+            "url"       =>  "",
+            "label"     =>  $ticket . ": Pengajuan tiket"
+        ];
+
+        $getreplay = DB::table('vw_ticket_replays as tr')
+        ->select(
+            'tr.id', 'tr.type', 'tr.date', 'tr.text', 'tr.url_file',
+            'u.name as user_name'
+        )
+        ->leftJoin('users as u', function($join)
+        {
+            $join->on('u.id', '=', 'tr.user_id');
+        })
+        ->where([
+            'tr.ticket_id'  =>  $getdata->id,
+            'tr.status'     =>  1
+        ])
+        ->get();
+
+        if( count($getreplay) > 0 )
+        {
+            foreach($getreplay as $row)
+            {
+                $list[] = [
+                    "date"      =>  date("d/m/Y H:i", strtotime($row->date)),
+                    "type"      =>  $row->type,
+                    "label"     =>  ($row->type === 1 ? "Diproses oleh " : "Selesai oleh ") . $row->user_name,
+                    "url"       =>  $row->url_file
+                ];
+            }
+        }
+
+
+        $data = [
+            "message"       =>  "",
+            "response"      =>  $list
+        ];
+
+
+        return response()->json($data, 200);
+    }
 }
