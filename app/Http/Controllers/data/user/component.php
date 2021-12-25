@@ -71,7 +71,7 @@ class component extends Controller
         if( $level != '9' && $level != "4")
         {
             $getdata = $getdata
-            ->whereIn('id', [$set_id,1000005,1000006,1000008]);
+            ->whereIn('id', [$set_id,1000005,1000006,1000007,1000008]);
         }
         $getdata = $getdata->where([
             'status'    =>  1
